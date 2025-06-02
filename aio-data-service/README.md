@@ -78,9 +78,6 @@ A scalable REST API for managing staff and hierarchical staff groups with Elasti
           "parentId": {
             "type": "keyword"
           },
-          "memberIds": {
-            "type": "keyword"
-          },
           "createdAt": {
             "type": "date",
             "format": "yyyy-MM-dd"
