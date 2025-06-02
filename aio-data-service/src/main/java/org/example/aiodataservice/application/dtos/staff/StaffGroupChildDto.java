@@ -22,7 +22,6 @@ public class StaffGroupChildDto {
     private String groupCode;
     private String name;
     private String parentId;
-    private Set<String> memberIds = new HashSet<>();
 
     @Field(type = FieldType.Date, format = DateFormat.date)
     @JsonFormat(pattern = "yyyy-MM-dd")

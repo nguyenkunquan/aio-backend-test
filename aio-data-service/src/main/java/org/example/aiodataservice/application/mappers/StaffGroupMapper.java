@@ -14,7 +14,6 @@ public class StaffGroupMapper {
                 .groupCode(staffGroup.getGroupCode())
                 .name(staffGroup.getName())
                 .parentId(staffGroup.getParentId())
-                .memberIds(staffGroup.getMemberIds())
                 .createdAt(staffGroup.getCreatedAt())
                 .updatedAt(staffGroup.getUpdatedAt())
                 .build();
