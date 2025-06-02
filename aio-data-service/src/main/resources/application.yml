@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: aio-data-service
+
+  # Elasticsearch Configuration
+  elasticsearch:
+    uris: ${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}
+    connection-timeout: 10s
+    socket-timeout: 30s
+    properties:
+      xpack.security.enabled: false
+
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000ms
+      #password: ${REDIS_PASSWORD:}
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+  # Cache Configuration
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000ms
+      cache-null-values: false
+
+  # Jackson Configuration
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
+
+# Server Configuration
+server:
+  port: 1975
+  servlet:
+    context-path: /api/v1
+
+# Application Custom Properties
+app:
+  elasticsearch:
+    index:
+      staff: staff
+      staff-group: staff_group
+      shift: shift
+
+# Logging Configuration
+logging:
+  level:
+    com.aiodataservice: DEBUG
+    org.springframework.data.elasticsearch: DEBUG
+    org.springframework.web: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  elasticsearch:
+    uris: elasticsearch:9200
+  data:
+    redis:
+      host: redis

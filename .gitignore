@@ -8,8 +8,8 @@ target/
 *.log
 
 # Gradle
-.gradle/
-build/
+**/build/
+**/.gradle/
 !gradle/wrapper/gradle-wrapper.jar
 
 # IDE
