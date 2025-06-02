@@ -379,14 +379,13 @@ public class StaffGroupServiceImpl implements StaffGroupService {
 
             // Phase 2
             List<StaffGroup> updatedGroups = new ArrayList<>();
+
             for (ImportStaffGroupDto dto : importDTOs) {
                 StaffGroup staffGroup = createdGroups.stream()
                         .filter(g -> g.getGroupCode().equals(dto.getGroupCode()))
                         .findFirst()
-                        .orElse(null);
-                if (staffGroup == null) {
-                    continue;
-                }
+                        .orElseGet(() -> staffGroupRepository.findByGroupCode(dto.getGroupCode())
+                                .orElseThrow(() -> new ResourceNotFoundException("Group not found: " + dto.getGroupCode())));
 
                 String lockKey = "lock:staffgroup:import:" + dto.getGroupCode();
                 try {
@@ -395,45 +394,33 @@ public class StaffGroupServiceImpl implements StaffGroupService {
                         throw new RuntimeException("Could not acquire lock for groupCode: " + dto.getGroupCode());
                     }
 
-                    List<StaffGroupChildDto> children = new ArrayList<>();
-                    if (dto.getChildrenCodes() != null && !dto.getChildrenCodes().isEmpty()) {
-                        for (String childGroupCode : dto.getChildrenCodes()) {
-                            String childId = groupCodeToId.get(childGroupCode);
-                            if (childId == null) {
-                                StaffGroup childGroup = staffGroupRepository.findByGroupCode(childGroupCode)
-                                        .orElseThrow(() -> new ResourceNotFoundException("Child group not found with groupCode: " + childGroupCode));
-                                childId = childGroup.getId();
-                            }
-                            final String childIdFinal = childId;
-                            StaffGroup childGroup = staffGroupRepository.findById(childIdFinal)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Child group not found with id: " + childIdFinal));
-                            if (childGroup.getParentId() != null) {
-                                throw new DuplicateResourceException("Child group already has a parent: " + childId);
-                            }
-                            childGroup.setParentId(staffGroup.getId());
-                            childGroup.setUpdatedAt(LocalDate.now());
-                            updatedGroups.add(childGroup);
-                            children.add(StaffGroupMapper.toChildDto(childGroup));
-                        }
-                    }
-                    staffGroup.setChildren(children);
-
                     if (dto.getParentCode() != null) {
                         String parentId = groupCodeToId.get(dto.getParentCode());
-                        if (parentId == null) {
-                            StaffGroup parentGroup = staffGroupRepository.findByGroupCode(dto.getParentCode())
-                                    .orElseThrow(() -> new ResourceNotFoundException("Parent group not found with groupCode: " + dto.getParentCode()));
-                            parentId = parentGroup.getId();
+                        StaffGroup parentGroup;
+
+                        if (parentId != null) {
+                            parentGroup = createdGroups.stream()
+                                    .filter(g -> g.getId().equals(parentId))
+                                    .findFirst()
+                                    .orElseGet(() -> staffGroupRepository.findById(parentId)
+                                            .orElseThrow(() -> new ResourceNotFoundException("Parent group not found with id: " + parentId)));
+                        } else {
+                            parentGroup = staffGroupRepository.findByGroupCode(dto.getParentCode())
+                                    .orElseThrow(() -> new ResourceNotFoundException("Parent group not found with code: " + dto.getParentCode()));
                         }
-                        String finalParentId = parentId;
-                        StaffGroup parentGroup = staffGroupRepository.findById(finalParentId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Parent group not found with id: " + finalParentId));
+
                         staffGroup.setParentId(parentGroup.getId());
+
+                        if (parentGroup.getChildren() == null) {
+                            parentGroup.setChildren(new ArrayList<>());
+                        }
                         parentGroup.getChildren().add(StaffGroupMapper.toChildDto(staffGroup));
                         parentGroup.setUpdatedAt(LocalDate.now());
+
                         updatedGroups.add(parentGroup);
                     }
 
+                    staffGroup.setUpdatedAt(LocalDate.now());
                     updatedGroups.add(staffGroup);
                 } finally {
                     redisTemplate.delete(lockKey);
