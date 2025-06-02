@@ -1,7 +1,7 @@
 # 🚀 Overview
 Design and implement a shift scheduling system using 2 scalable microservices:
 - Data Service: Shift data and group management (backed by Elasticsearch)
-- Scheduling Service: Weekly shift scheduling (asynchronous, backed by relational DB
+- Scheduling Service: Weekly shift scheduling (asynchronous, backed by relational DB)
 
 Both services must support horizontal scaling to handle increased load efficiently.
 
