@@ -133,25 +133,35 @@ http://localhost:1975/api/v1/swagger-ui/index.html
 ### Staff Group Document Sample
 ```json
 {
-  "id": "b590af26-2692-4189-8b99-63c5098f342c",
-  "groupCode": "IT-DEPT",
-  "name": "Information Technology Department",
-  "parentId": null,
-  "children": [
-    {
-      "id": "group-002",
-      "groupCode": "DEV-TEAM",
-      "name": "Development Team",
-      "parentId": "group-001",
-      "memberIds": ["staff-001", "staff-002"],
-      "createdAt": "2024-01-15",
-      "updatedAt": "2024-01-15"
-    }
-  ],
-  "memberIds": ["staff-001", "staff-002", "staff-003"],
-  "createdAt": "2025-06-02",
-  "updatedAt": "2024-06-02"
-}
+    "id": "5352cc05-d19a-459f-82b6-fe762a05299b",
+    "groupCode": "DEV-TEAM",
+    "name": "Development Team",
+    "parentId": "c2fa1fae-0418-4662-af45-bb77fd150cf9",
+    "children": [
+      {
+        "id": "3ea1ec6b-a26b-4d14-bcb1-73f86436a4f3",
+        "groupCode": "FRONTEND-TEAM",
+        "name": "Frontend Development Team",
+        "parentId": "5352cc05-d19a-459f-82b6-fe762a05299b",
+        "createdAt": "2025-06-02",
+        "updatedAt": "2025-06-02"
+      },
+      {
+        "id": "dae90712-a580-4fed-a30f-a31f1d235f96",
+        "groupCode": "BACKEND-TEAM",
+        "name": "Backend Development Team",
+        "parentId": "5352cc05-d19a-459f-82b6-fe762a05299b",
+        "createdAt": "2025-06-02",
+        "updatedAt": "2025-06-02"
+      }
+    ],
+    "memberIds": [
+      "c0c989f4-22ab-4a17-8d65-c352b5f9218a",
+      "63b86211-a549-4d81-9510-e727a894e740"
+    ],
+    "createdAt": "2025-06-02",
+    "updatedAt": "2025-06-02"
+  }
 ```
 # 📄 Import JSON Examples
 ### 📥 Staff Import File (`staff-import.json`)
