@@ -17,7 +17,7 @@ A scalable REST API for managing staff and hierarchical staff groups with Elasti
 
 # 🗃️ Database Schema
 
-## 1. Staff
+### 1. Staff
 ```json
 {
   "mappings": {
@@ -116,7 +116,141 @@ http://localhost:1975/api/v1/swagger-ui/index.html
 ```
 
 # 📊 Sample Data
+> ⚠️ **Note:** The `id` of each document is generated using `UUID.randomUUID()`.  
+> Sample data is for demonstration purposes only — you must retrieve the actual ID after saving to the database.
+### Staff Document Sample
+```json
+{
+  "id": "baad0a85-23e3-4a45-96f5-111a2f735031",
+  "staffCode": "STAFF-01",
+  "name": "Quan Nguyen Do Minh",
+  "email": "quanndm@company.com",
+  "createdAt": "2025-06-02",
+  "updatedAt": "2025-06-02"
+}
+```
 
+### Staff Group Document Sample
+```json
+{
+  "id": "b590af26-2692-4189-8b99-63c5098f342c",
+  "groupCode": "IT-DEPT",
+  "name": "Information Technology Department",
+  "parentId": null,
+  "children": [
+    {
+      "id": "group-002",
+      "groupCode": "DEV-TEAM",
+      "name": "Development Team",
+      "parentId": "group-001",
+      "memberIds": ["staff-001", "staff-002"],
+      "createdAt": "2024-01-15",
+      "updatedAt": "2024-01-15"
+    }
+  ],
+  "memberIds": ["staff-001", "staff-002", "staff-003"],
+  "createdAt": "2025-06-02",
+  "updatedAt": "2024-06-02"
+}
+```
+# 📄 Import JSON Examples
+### 📥 Staff Import File (`staff-import.json`)
+```json
+[
+  {
+    "staffCode": "STAFF-02",
+    "name": "John Doe",
+    "email": "john.doe@company.com"
+  },
+  {
+    "staffCode": "STAFF-03",
+    "name": "Jane Smith",
+    "email": "jane.smith@company.com"
+  },
+  {
+    "staffCode": "STAFF-04",
+    "name": "Bob Johnson",
+    "email": "bob.johnson@company.com"
+  },
+  {
+    "staffCode": "STAFF-05",
+    "name": "Alice Williams",
+    "email": "alice.williams@company.com"
+  },
+  {
+    "staffCode": "STAFF-06",
+    "name": "Charlie Brown",
+    "email": "charlie.brown@company.com"
+  },
+  {
+    "staffCode": "STAFF-07",
+    "name": "Diana Prince",
+    "email": "diana.prince@company.com"
+  },
+  {
+    "staffCode": "STAFF-08",
+    "name": "Edward Norton",
+    "email": "edward.norton@company.com"
+  },
+  {
+    "staffCode": "STAFF-09",
+    "name": "Fiona Green",
+    "email": "fiona.green@company.com"
+  }
+]
+```
+### 📥 Staff Group Import File (staff-groups-import.json`)
+```json
+[
+  {
+    "groupCode": "COMPANY",
+    "name": "Company",
+    "childrenCodes": ["IT-DEPT", "HR-DEPT", "SALES-DEPT"]
+  },
+  {
+    "groupCode": "IT-DEPT",
+    "name": "Information Technology Department",
+    "parentCode": "COMPANY",
+    "childrenCodes": ["DEV-TEAM", "QA-TEAM", "DEVOPS-TEAM"]
+  },
+  {
+    "groupCode": "DEV-TEAM",
+    "name": "Development Team",
+    "parentCode": "IT-DEPT",
+    "childrenCodes": ["FRONTEND-TEAM", "BACKEND-TEAM"]
+  },
+  {
+    "groupCode": "FRONTEND-TEAM",
+    "name": "Frontend Development Team",
+    "parentCode": "DEV-TEAM"
+  },
+  {
+    "groupCode": "BACKEND-TEAM",
+    "name": "Backend Development Team",
+    "parentCode": "DEV-TEAM"
+  },
+  {
+    "groupCode": "QA-TEAM",
+    "name": "Quality Assurance Team",
+    "parentCode": "IT-DEPT"
+  },
+  {
+    "groupCode": "DEVOPS-TEAM",
+    "name": "Devops Team",
+    "parentCode": "IT-DEPT"
+  },
+  {
+    "groupCode": "HR-DEPT",
+    "name": "Human Resources Department",
+    "parentCode": "COMPANY"
+  },
+  {
+    "groupCode": "SALES-DEPT",
+    "name": "Sales Department",
+    "parentCode": "COMPANY"
+  }
+]
+```
 
 ---
 
